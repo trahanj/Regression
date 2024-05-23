@@ -24,8 +24,6 @@ devtools::install_github("jhudsl/matahari")
 library(matahari)
 ```
 
-
-
 ```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F, results='hide'}
 # make this an external chunk that can be included in any file
 options(width = 100)
