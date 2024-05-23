@@ -13,7 +13,10 @@ output:
 ---
 
 ```{r message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
 library(devtools)
+options(scipen=999)
 devtools::install_github("jhudsl/collegeIncome")
 library(collegeIncome)
 data(college)
@@ -24,9 +27,8 @@ devtools::install_github("jhudsl/matahari")
 library(matahari)
 ```
 
-
-
 ```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F, results='hide'}
+library(knitr)
 # make this an external chunk that can be included in any file
 options(width = 100)
 opts_chunk$set(message = F, error = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache.path = '.cache/', fig.path = 'fig/')
@@ -43,5 +45,41 @@ knit_hooks$set(plot = knitr:::hook_plot_html)
 runif(1)
 ```
 
+```{r}
+dance_start(value = FALSE, contents = FALSE)
+```
 
+```{r}
+fit <- lm(median - 1 ~ major_category, college)
+```
+
+```{r}
+summary(fit)
+```
+```{r}
+plot(fit)
+```
+
+
+
+```{r}
+college %>%
+  group_by(major_category) %>%
+  summarize(
+    sample_size = sum(sample_size),
+    n()
+  )
+```
+
+```{r fig.width=6, fig.height=8}
+ggplot(
+  college %>%
+    mutate(median = round(median)),
+  aes(x = median, y = major_category, color = major_category)
+) +
+  geom_violin() +
+  geom_jitter(aes(size = sample_size), alpha = 0.3) +
+  theme(legend.position = "none") +
+  facet_grid(rows = vars(major_category), scales = 'free_y')
+```
 
